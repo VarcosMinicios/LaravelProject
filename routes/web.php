@@ -15,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web'])->group(function () {
-    Route::get('/', 'App\Http\Controllers\Site\HomeController');
+    Route::get('/', 'App\Http\Controllers\Site\HomeController')->name('site.home');
+
+    Route::get('/list', 'App\Http\Controllers\Site\ListController@index');
+
+    Route::get('/register', 'App\Http\Controllers\Site\RegisterController@index');
+    Route::post('/register', 'App\Http\Controllers\Site\RegisterController@form')->name('site.form');
 });
