@@ -4,6 +4,112 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+
+        // Function to autocapitalize the inputs, cause the attribute "autocapitalize='characters'" isn't working
+        function toUpper(value, id) {
+            value = value.toUpperCase();
+            document.getElementById(id).value = value;
+        }
+
+        // pass the type of mask, id of element, the actual value for practicality and the event key dispatched
+        // verify the key for only accepts numbers (in this case), and prevents loops caused by replacement of value and backspace
+        function inputMask(mask, id, value, k) {
+
+            if (k.key == "Backspace" || k.key == "ArrowRight" || k.key == "ArrowLeft" || k.key == "ArrowDown" || k.key == "ArrowUp") return;
+
+            if (mask == "cpf") {
+                if (!isNaN(k.key)) {
+                    if (value.length == 3) {
+                        document.getElementById(id).value = value + '.';
+                    }
+                    else if (value.length == 7) {
+                        document.getElementById(id).value = value + '.';
+                    }
+                    else if (value.length == 11) {
+                        document.getElementById(id).value = value + '-';
+                    }
+                } else {
+                    value = value.replace(value[value.length - 1], "")
+                    document.getElementById(id).value = value;
+                }
+            }
+
+            if (mask == "phone-res") {
+                if (!isNaN(k.key)) {
+                    if (value.length == 1) {
+                        document.getElementById(id).value = '(' + value;
+                    }
+                    else if (value.length == 3) {
+                        document.getElementById(id).value = value + ') ';
+                    }
+                    else if (value.length == 9) {
+                        document.getElementById(id).value = value + '-';
+                    }
+                } else {
+                    value = value.replace(value[value.length - 1], "")
+                    document.getElementById(id).value = value;
+                }
+            }
+
+            if (mask == "phone-cel") {
+                if (!isNaN(k.key)) {
+                    if (value.length == 1) {
+                        document.getElementById(id).value = '(' + value;
+                    }
+                    else if (value.length == 3) {
+                        document.getElementById(id).value = value + ') ';
+                    }
+                    else if (value.length == 10) {
+                        document.getElementById(id).value = value + '-';
+                    }
+                } else {
+                    value = value.replace(value[value.length - 1], "")
+                    document.getElementById(id).value = value;
+                }
+            }
+
+            if (mask == "cns") {
+                if (!isNaN(k.key)) {
+                    if (value.length == 3) {
+                        document.getElementById(id).value = value + '.';
+                    }
+                    else if (value.length == 8) {
+                        document.getElementById(id).value = value + '.';
+                    }
+                    else if (value.length == 13) {
+                        document.getElementById(id).value = value + '.';
+                    }
+                } else {
+                    value = value.replace(value[value.length - 1], "")
+                    document.getElementById(id).value = value;
+                }
+            }
+
+            if (mask == "cep") {
+                if (!isNaN(k.key)) {
+                    if (value.length == 5) {
+                        document.getElementById(id).value = value + '-';
+                    }
+                } else {
+                    value = value.replace(value[value.length - 1], "")
+                    document.getElementById(id).value = value;
+                }
+            }
+        }
+
+        // Function to load correctly the Select Boxes
+        function updateSelectBox() {
+            document.getElementById("gender").value = '{{$citizen->gender}}';
+            document.getElementById("breed").value = '{{$citizen->breed}}';
+            document.getElementById("nationality").value = '{{$citizen->nationality}}';
+            document.getElementById("state").value = '{{$citizen->state}}';
+            document.getElementById("adress_type").value = '{{$citizen->adress_type}}';
+        }
+
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -110,15 +216,30 @@
             margin-left: 40%;
         }
 
+        .error {
+            margin: 5px 5px;
+        }
+
+        #header {
+            background-color: #2596be;
+            display: flex;
+        }
+
+        #title {
+            padding: 2px 10px 2px 15px;
+            font-size: 22px;
+            color: #ffffff;
+        }
+
     </style>
     @toastr_css
     <title>Cadastro do Cidadão</title>
 </head>
-<body>
+
+<body onload="updateSelectBox()">
     
-    <div>
-        <h1 id="titulo">Cadastro de Cidadão</h1>
-        <br>
+    <div id="header">
+        <h1 id="title">Cadastro de Cidadão</h1>
     </div>
 
     <form action="{{ route('register.update', $citizen->id) }}" method="POST" enctype="multipart/form-data">
@@ -134,7 +255,7 @@
 
             <div class="campo">
                 <strong><label for="cpf">CPF</label></strong>
-                <input type="text" name="cpf" id="cpf" placeholder="DIGITE O CPF" value="{{$citizen->cpf}}">
+                <input type="text" name="cpf" id="cpf" maxlength="15" onkeyup="inputMask('cpf', this.id, this.value, event)" placeholder="DIGITE O CPF" value="{{$citizen->cpf}}">
             </div>
 
             <div class="campo">
@@ -152,16 +273,19 @@
         <fieldset class="group">
             
             <div class="campo">
-                <strong><label for="name">Name *</label></strong>
-                <input type="text" name="name" id="name" placeholder="DIGITE O NOME" value="{{$citizen->name}}" required>
+                <strong><label for="name">Nome *</label></strong>
+                <input type="text" name="name" id="name" onkeyup="toUpper(this.value, this.id)" placeholder="DIGITE O NOME" value="{{$citizen->name}}" required>
                 @error('name')
-                    <div>{{ $message }}</div>
+                    <div class="error">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="mother">Nome da Mãe *</label></strong>
-                <input type="text" name="mother" id="mother" placeholder="DIGITE O NOME DA MÃE" value="{{$citizen->mother}}" required>
+                <input type="text" name="mother" id="mother" onkeyup="toUpper(this.value, this.id)" placeholder="DIGITE O NOME DA MÃE" value="{{$citizen->mother}}" required>
+                @error('mother')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
         </fieldset>
@@ -170,21 +294,29 @@
             
             <div class="campo">
                 <strong><label for="cns">CNS *</label></strong>
-                <input type="text" name="cns" id="cns" placeholder="DIGITE O CARTÃO DO SUS" value="{{$citizen->cns}}" required>
+                <input type="text" name="cns" id="cns" maxlength="18" onkeyup="inputMask('cns', this.id, this.value, event)" placeholder="DIGITE O CARTÃO DO SUS" value="{{$citizen->cns}}" required>
+                @error('cns')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="born_day">Data de Nascimento *</label></strong>
                 <input type="date" name="born_day" id="born_day" placeholder="SELECIONE A DATA DE NASCIMENTO" value="{{$citizen->born_day->format('Y-m-d')}}" required>
+                @error('born_day')
+                    <div class="erroe">{{ $message }}</div>
+                @enderror
             </div>
-
             <div class="campo">
                 <strong><label for="gender">Sexo *</label></strong>
-                <select name="gender" id="gender" value="{{$citizen->gender}}" required>
-                    <option selected disabled value="">Escolha uma opção</option>
+                <select name="gender" id="gender" required>
+                    <option disabled >Escolha uma opção</option>
                     <option>Masculino</option>
                     <option>Feminino</option>
                 </select>
+                @error('gender')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
         </fieldset>
@@ -193,8 +325,8 @@
             
             <div class="campo">
                 <strong><label for="breed">Raça/Cor</label></strong>
-                <select name="breed" id="breed" value="{{$citizen->breed}}">
-                    <option disabled value="">Escolha uma opção</option>
+                <select name="breed" id="breed">
+                    <option disabled >Escolha uma opção</option>
                     <option>Branco</option>
                     <option>Preto</option>
                     <option>Pardo</option>
@@ -204,18 +336,9 @@
             </div>
 
             <div class="campo">
-                <strong><label for="ethnicity">Etinia</label></strong>
-                <select name="ethnicity" id="ethnicity" value="{{$citizen->ethnicity}}">
-                    <option disabled value="">Escolha uma opção</option>
-                    <option>Masculino</option>
-                    <option>Feminino</option>
-                </select>
-            </div>
-
-            <div class="campo">
                 <strong><label for="nationality">Nacionalidade</label></strong>
-                <select name="nationality" id="nationality" value="{{$citizen->nacionality}}">
-                    <option disabled value="">Escolha uma opção</option>
+                <select name="nationality" id="nationality">
+                    <option disabled >Escolha uma opção</option>
                     <option>Brasileiro</option>
                     <option>Estrangeiro</option>
                 </select>
@@ -232,12 +355,12 @@
 
             <div class="campo">
                 <strong><label for="phone">Telefone Residencial</label></strong>
-                <input type="tel" name="phone" id="phone" placeholder="DIGITE TELEFONE" value="{{$citizen->phone}}">
+                <input type="tel" name="phone" maxlength="14" id="phone" onkeyup="inputMask('phone-res', this.id, this.value, event)" placeholder="DIGITE TELEFONE" value="{{$citizen->phone}}">
             </div>
 
             <div class="campo">
                 <strong><label for="cellphone">Telefone Celular</label></strong>
-                <input type="tel" name="cellphone" id="cellphone" placeholder="DIGITE TELEFONE" value="{{$citizen->cellphone}}">
+                <input type="tel" name="cellphone" maxlength="15" id="cellphone" onkeyup="inputMask('phone-cel', this.id, this.value, event)" placeholder="DIGITE TELEFONE" value="{{$citizen->cellphone}}">
             </div>
 
         </fieldset>
@@ -252,27 +375,55 @@
 
             <div class="campo">
                 <strong><label for="cep">CEP *</label></strong>
-                <input type="text" name="cep" id="cep" placeholder="DIGITE O CEP" value="{{$citizen->cep}}" required>
+                <input type="text" name="cep" id="cep" maxlength="9" onkeyup="inputMask('cep', this.id, this.value, event)" placeholder="DIGITE O CEP" value="{{$citizen->cep}}" required>
+                @error('cep')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="state">Estado *</label></strong>
-                <select name="state" id="state" value="{{$citizen->state}}" required>
-                    <option disabled value="">Escolha uma opção</option>
-                    <option>Minas Gerais</option>
-                    <option>São Paulo</option>
-                    <option>Rio de Janeiro</option>
-                    <option>Espírito Santo</option>
+                <select name="state" id="state" required>
+                    <option disabled >Escolha uma opção</option>
+                    <option>Acre</option>
+                    <option>Alagoas</option>
+                    <option>Amapá</option>
+                    <option>Amazonas</option>
                     <option>Bahia</option>
+                    <option>Ceará</option>
+                    <option>Distrito Federal</option>
+                    <option>Espírito Santo</option>
+                    <option>Goiás</option>
+                    <option>Maranhão</option>
+                    <option>Mato Grosso</option>
+                    <option>Mato Grosso do Sul</option>
+                    <option>Minas Gerais</option>
+                    <option>Pará</option>
+                    <option>Paraíba</option>
                     <option>Paraná</option>
+                    <option>Pernambuco</option>
+                    <option>Piauí</option>
+                    <option>Rio de Janeiro</option>
+                    <option>Rio Grande do Norte</option>
+                    <option>Rio Grande do Sul</option>
+                    <option>Rondônia</option>
+                    <option>Roraima</option>
                     <option>Santa Catarina</option>
-                    <option>Brasília</option>
+                    <option>São Paulo</option>
+                    <option>Sergipe</option>
+                    <option>Tocantins</option>
                 </select>
+                @error('state')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="city">Cidade *</label></strong>
-                <input type="text" name="city" id="city" placeholder="DIGITE A CIDADE" value="{{$citizen->city}}" required>
+                <input type="text" name="city" onkeyup="toUpper(this.value, this.id)" id="city" placeholder="DIGITE A CIDADE" value="{{$citizen->city}}" required>
+                @error('city')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
         </fieldset>
@@ -281,17 +432,44 @@
 
             <div class="campo">
                 <strong><label for="district">Bairro *</label></strong>
-                <input type="text" name="district" id="district" placeholder="DIGITE O BAIRRO" value="{{$citizen->district}}" required>
+                <input type="text" name="district" onkeyup="toUpper(this.value, this.id)" id="district" placeholder="DIGITE O BAIRRO" value="{{$citizen->district}}" required>
+                @error('district')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="adress_type">Tipo de Logadouro *</label></strong>
-                <input type="text" name="adress_type" id="adress_type" placeholder="DIGITE O TIPO DE LOGADOURO" value="{{$citizen->adress_type}}" required>
+                <select name="adress_type" id="adress_type" required>
+                    <option disabled >Escolha uma opção</option>
+                    <option>Avenida</option>
+                    <option>Campo</option>
+                    <option>Chácara</option>
+                    <option>Condomínio</option>
+                    <option>Distrito</option>
+                    <option>Estrada</option>
+                    <option>Fazenda</option>
+                    <option>Jardim</option>
+                    <option>Loteamento</option>
+                    <option>Parque</option>
+                    <option>Praça</option>
+                    <option>Rua</option>
+                    <option>Travessa</option>
+                    <option>Trevo</option>
+                    <option>Viela</option>
+                    <option>Rodovia</option>
+                </select>
+                @error('adress_type')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="adress">Logadouro *</label></strong>
-                <input type="text" name="adress" id="adress" placeholder="DIGITE O LOGADOURO" value="{{$citizen->adress}}" required>
+                <input type="text" name="adress" onkeyup="toUpper(this.value, this.id)" id="adress" value="{{$citizen->adress}}" placeholder="DIGITE O LOGADOURO" required>
+                @error('adress')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
         </fieldset>
@@ -301,11 +479,14 @@
             <div class="campo">
                 <strong><label for="number">Número *</label></strong>
                 <input type="number" name="number" id="number" placeholder="DIGITE O NÚMERO" value="{{$citizen->number}}" required>
+                @error('number')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="campo">
                 <strong><label for="reference">Ponto de Referência</label></strong>
-                <input type="text" name="reference" id="reference" placeholder="DIGITE A REFERÊNCIA" value="{{$citizen->reference}}">
+                <input type="text" name="reference" onkeyup="toUpper(this.value, this.id)" id="reference" placeholder="DIGITE A REFERÊNCIA" value="{{$citizen->reference}}">
             </div>
 
             <div class="campo">
@@ -319,7 +500,7 @@
 
             <div class="campo">
                 <strong><label for="complement">Complemento</label></strong>
-                <input type="text" name="complement" id="complement" placeholder="DIGITE O COMPLEMENTO" value="{{$citizen->complement}}">
+                <input type="text" name="complement" onkeyup="toUpper(this.value, this.id)" id="complement" placeholder="DIGITE O COMPLEMENTO" value="{{$citizen->complement}}">
             </div>
 
         </fieldset>
@@ -346,6 +527,10 @@
     @jquery
     @toastr_js
     @toastr_render
+
+    <script>
+        
+    </script>
 
 </body>
 </html>

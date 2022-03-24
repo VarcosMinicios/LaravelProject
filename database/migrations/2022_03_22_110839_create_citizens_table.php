@@ -24,7 +24,6 @@ return new class extends Migration
             $table->date('born_day'); 
             $table->string('gender');
             $table->string('breed')->nullable();
-            $table->string('ethnicity')->nullable();
             $table->string('nationality')->nullable();
             $table->string('email')->nullable(); 
             $table->string('phone')->nullable(); 

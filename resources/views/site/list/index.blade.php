@@ -7,6 +7,7 @@
 
     <script>
 
+        // Function to link routes with the id provided in the foreach loop
         function linkToRoute(route, id) {
 
             if (route == "edit") {
@@ -30,6 +31,7 @@
             }
         }
 
+        // Function to show the confirmation to exclude in the list and link routes to the buttons
         function showPupup(name, id) {
 
             document.getElementById('popup').style.display = "block";
@@ -125,6 +127,7 @@
             padding: 0.2em 0.6em;
             box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
             justify-content: center;
+            cursor: pointer;
             align-items: center;
         }
 
@@ -170,7 +173,7 @@
             font-size: 1.2em;
             background-color: #c41515;;
             border: 0;
-            margin-top: 90px;
+            margin-top: 50px;
             margin-bottom: 1em;
             margin-left: 15%;
             color: #ffffff;
@@ -190,7 +193,7 @@
             font-size: 1.2em;
             background-color: #2596be;;
             border: 0;
-            margin-top: 90px;
+            margin-top: 50px;
             margin-bottom: 1em;
             margin-left: 15%;
             color: #ffffff;

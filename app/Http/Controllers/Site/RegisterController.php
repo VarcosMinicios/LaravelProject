@@ -111,6 +111,6 @@ class RegisterController extends Controller
      */
     public function destroy($citizen)
     {
-        
+
     }
 }

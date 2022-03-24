@@ -21,7 +21,6 @@ class Citizen extends Model
         'born_day', 
         'gender',
         'breed',
-        'ethnicity',
         'nationality',
         'email', 
         'phone', 

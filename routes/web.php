@@ -16,6 +16,7 @@ use App\Http\Controllers\Site\RegisterController;
 */
 
 Route::middleware(['web'])->group(function () {
+    
     Route::get('/', 'App\Http\Controllers\Site\RegisterController@index');
 
     Route::resource('register', RegisterController::class);
