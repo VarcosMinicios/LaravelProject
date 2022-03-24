@@ -42,4 +42,9 @@ class Citizen extends Model
         'deleted_at',
         'born_day',
     ];
+
+    protected $casts = [
+        'born_day'  => 'datetime:dd/mm/yyyy',
+        'deleted_at'  => 'datetime:dd/mm/yyyy'
+  ];
 }

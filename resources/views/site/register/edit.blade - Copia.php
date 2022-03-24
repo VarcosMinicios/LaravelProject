@@ -121,8 +121,9 @@
         <br>
     </div>
 
-    <form action="{{route('register.store')}}" method="post">
+    <form action="" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div>
             <h3 id="subtitulo">Informações Pessoais</h3>
             <hr>
@@ -132,18 +133,27 @@
         <fieldset class="group">
 
             <div class="campo">
+                {{dd($citizen->name)}}
+                <strong><label for="name">Name *</label></strong>
+                <input type="text" name="name" id="name" placeholder="DIGITE O NOME" value="{{$citizen->name}}" required>
+                @error('name')
+                    <div>{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="campo">
                 <strong><label for="cpf">CPF</label></strong>
-                <input type="text" name="cpf" id="cpf" placeholder="DIGITE O CPF">
+                <input type="text" name="cpf" id="cpf" placeholder="DIGITE O CPF" value="{{$citizen->cpf}}">
             </div>
 
             <div class="campo">
                 <strong><label for="rg">RG</label></strong>
-                <input type="text" name="rg" id="rg" placeholder="DIGITE O RG">
+                <input type="text" name="rg" id="rg" placeholder="DIGITE O RG" value="{{$citizen->rg}}">
             </div>
 
             <div class="campo">
                 <strong><label for="prontuario">Prontuário</label></strong>
-                <input type="text" name="prontuario" id="prontuario" placeholder="DIGITE O PRONTUÁRIO">
+                <input type="text" name="prontuario" id="prontuario" placeholder="DIGITE O PRONTUÁRIO" value="{{$citizen->prontuario}}">
             </div>
 
         </fieldset>
@@ -152,7 +162,7 @@
             
             <div class="campo">
                 <strong><label for="name">Name *</label></strong>
-                <input type="text" name="name" id="name" placeholder="DIGITE O NOME" required value="{{old('name')}}">
+                <input type="text" name="name" id="name" placeholder="DIGITE O NOME" value="{{$citizen->name}}" required>
                 @error('name')
                     <div>{{ $message }}</div>
                 @enderror
@@ -160,7 +170,7 @@
 
             <div class="campo">
                 <strong><label for="mother">Nome da Mãe *</label></strong>
-                <input type="text" name="mother" id="mother" placeholder="DIGITE O NOME DA MÃE" required>
+                <input type="text" name="mother" id="mother" placeholder="DIGITE O NOME DA MÃE" value="{{$citizen->mother}}" required>
             </div>
 
         </fieldset>
@@ -169,12 +179,12 @@
             
             <div class="campo">
                 <strong><label for="cns">CNS *</label></strong>
-                <input type="text" name="cns" id="cns" placeholder="DIGITE O CARTÃO DO SUS" required>
+                <input type="text" name="cns" id="cns" placeholder="DIGITE O CARTÃO DO SUS" value="{{$citizen->cns}}" required>
             </div>
 
             <div class="campo">
                 <strong><label for="born_day">Data de Nascimento *</label></strong>
-                <input type="date" name="born_day" id="born_day" placeholder="SELECIONE A DATA DE NASCIMENTO" required>
+                <input type="date" name="born_day" id="born_day" placeholder="SELECIONE A DATA DE NASCIMENTO" value="{{$citizen->born_day}}" required>
             </div>
 
             <div class="campo">
@@ -192,8 +202,8 @@
             
             <div class="campo">
                 <strong><label for="breed">Raça/Cor</label></strong>
-                <select name="breed" id="breed">
-                    <option selected disabled value="">Escolha uma opção</option>
+                <select name="breed" id="breed" value="{{$citizen->breed}}">
+                    <option disabled value="">Escolha uma opção</option>
                     <option>Branco</option>
                     <option>Preto</option>
                     <option>Pardo</option>
@@ -204,8 +214,8 @@
 
             <div class="campo">
                 <strong><label for="ethnicity">Etinia</label></strong>
-                <select name="ethnicity" id="ethnicity">
-                    <option selected disabled value="">Escolha uma opção</option>
+                <select name="ethnicity" id="ethnicity" value="{{$citizen->ethnicity}}">
+                    <option disabled value="">Escolha uma opção</option>
                     <option>Masculino</option>
                     <option>Feminino</option>
                 </select>
@@ -213,8 +223,8 @@
 
             <div class="campo">
                 <strong><label for="nationality">Nacionalidade</label></strong>
-                <select name="nationality" id="nationality" >
-                    <option selected disabled value="">Escolha uma opção</option>
+                <select name="nationality" id="nationality" value="{{$citizen->nacionality}}">
+                    <option disabled value="">Escolha uma opção</option>
                     <option>Brasileiro</option>
                     <option>Estrangeiro</option>
                 </select>
@@ -226,17 +236,17 @@
 
             <div class="campo">
                 <strong><label for="email">E-mail</label></strong>
-                <input type="email" name="email" id="email" placeholder="DIGITE O EMAIL">
+                <input type="email" name="email" id="email" placeholder="DIGITE O EMAIL" value="{{$citizen->email}}">
             </div>
 
             <div class="campo">
                 <strong><label for="phone">Telefone Residencial</label></strong>
-                <input type="tel" name="phone" id="phone" placeholder="DIGITE TELEFONE">
+                <input type="tel" name="phone" id="phone" placeholder="DIGITE TELEFONE" value="{{$citizen->phone}}">
             </div>
 
             <div class="campo">
                 <strong><label for="cellphone">Telefone Celular</label></strong>
-                <input type="tel" name="cellphone" id="cellphone" placeholder="DIGITE TELEFONE">
+                <input type="tel" name="cellphone" id="cellphone" placeholder="DIGITE TELEFONE" value="{{$citizen->cellphone}}">
             </div>
 
         </fieldset>
@@ -251,13 +261,13 @@
 
             <div class="campo">
                 <strong><label for="cep">CEP *</label></strong>
-                <input type="text" name="cep" id="cep" placeholder="DIGITE O CEP" required>
+                <input type="text" name="cep" id="cep" placeholder="DIGITE O CEP" value="{{$citizen->cep}}" required>
             </div>
 
             <div class="campo">
                 <strong><label for="state">Estado *</label></strong>
-                <select name="state" id="state" required>
-                    <option selected disabled value="">Escolha uma opção</option>
+                <select name="state" id="state" value="{{$citizen->state}}" required>
+                    <option disabled value="">Escolha uma opção</option>
                     <option>Minas Gerais</option>
                     <option>São Paulo</option>
                     <option>Rio de Janeiro</option>
@@ -271,7 +281,7 @@
 
             <div class="campo">
                 <strong><label for="city">Cidade *</label></strong>
-                <input type="text" name="city" id="city" placeholder="DIGITE A CIDADE" required>
+                <input type="text" name="city" id="city" placeholder="DIGITE A CIDADE" value="{{$citizen->city}}" required>
             </div>
 
         </fieldset>
@@ -280,17 +290,17 @@
 
             <div class="campo">
                 <strong><label for="district">Bairro *</label></strong>
-                <input type="text" name="district" id="district" placeholder="DIGITE O BAIRRO" required>
+                <input type="text" name="district" id="district" placeholder="DIGITE O BAIRRO" value="{{$citizen->district}}" required>
             </div>
 
             <div class="campo">
                 <strong><label for="adress_type">Tipo de Logadouro *</label></strong>
-                <input type="text" name="adress_type" id="adress_type" placeholder="DIGITE O TIPO DE LOGADOURO" required>
+                <input type="text" name="adress_type" id="adress_type" placeholder="DIGITE O TIPO DE LOGADOURO" value="{{$citizen->adress_type}}" required>
             </div>
 
             <div class="campo">
                 <strong><label for="adress">Logadouro *</label></strong>
-                <input type="text" name="adress" id="adress" placeholder="DIGITE O LOGADOURO" required>
+                <input type="text" name="adress" id="adress" placeholder="DIGITE O LOGADOURO" value="{{$citizen->adress}}" required>
             </div>
 
         </fieldset>
@@ -299,17 +309,17 @@
 
             <div class="campo">
                 <strong><label for="number">Número *</label></strong>
-                <input type="number" name="number" id="number" placeholder="DIGITE O NÚMERO" required>
+                <input type="number" name="number" id="number" placeholder="DIGITE O NÚMERO" value="{{$citizen->number}}" required>
             </div>
 
             <div class="campo">
                 <strong><label for="reference">Ponto de Referência</label></strong>
-                <input type="text" name="reference" id="reference" placeholder="DIGITE A REFERÊNCIA">
+                <input type="text" name="reference" id="reference" placeholder="DIGITE A REFERÊNCIA" value="{{$citizen->reference}}">
             </div>
 
             <div class="campo">
                 <strong><label for="city_code">Código IBGE</label></strong>
-                <input type="text" name="city_code" id="city_code" placeholder="DIGITE O CÓDIGO IBGE">
+                <input type="text" name="city_code" id="city_code" placeholder="DIGITE O CÓDIGO IBGE" value="{{$citizen->city_code}}">
             </div>
 
         </fieldset>
@@ -318,7 +328,7 @@
 
             <div class="campo">
                 <strong><label for="complement">Complemento</label></strong>
-                <input type="text" name="complement" id="complement" placeholder="DIGITE O COMPLEMENTO">
+                <input type="text" name="complement" id="complement" placeholder="DIGITE O COMPLEMENTO" value="{{$citizen->complement}}">
             </div>
 
         </fieldset>
@@ -328,7 +338,7 @@
             <div class="btns">
 
                 <div class="campo">
-                    <a href="{{route('register.index')}}">
+                    <a href="{{route('site.home')}}">
                     <button class="btn" type="button">Voltar</button> 
                 </div>
 

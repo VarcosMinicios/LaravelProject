@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Site\RegisterController;
 
 
 /*
@@ -15,10 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web'])->group(function () {
-    Route::get('/', 'App\Http\Controllers\Site\HomeController')->name('site.home');
+    Route::get('/', 'App\Http\Controllers\Site\RegisterController@index');
 
-    Route::get('/list', 'App\Http\Controllers\Site\ListController@index');
+    Route::resource('register', RegisterController::class);
 
-    Route::get('/register', 'App\Http\Controllers\Site\RegisterController@index');
-    Route::post('/register', 'App\Http\Controllers\Site\RegisterController@form')->name('site.form');
 });

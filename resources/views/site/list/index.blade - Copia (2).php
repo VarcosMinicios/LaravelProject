@@ -13,20 +13,12 @@
                 let url = "{{ route('register.edit', ':id') }}";
                 url = url.replace(':id', id);
                 document.location.href=url;
+            } else if (route == "register") {
+                location.href="{{route('register.create')}}"
             } else if (route == "exclude") {
                 let url = "{{ route('register.show', ':id') }}";
                 url = url.replace(':id', id);
                 document.location.href=url;
-            } else if (route == "home") {
-                document.getElementById('popup').style.display = "none";
-                document.getElementById('mask').style.display = "none";
-                const elements = document.getElementsByClassName('action-btn');
-
-                for (let i = 0; i < elements.lenght; i++) {
-                    elements[i].disabled = false;
-                }
-            } else {
-                document.location.href="{{route('register.create')}}"
             }
         }
 
@@ -36,19 +28,21 @@
             document.getElementById('mask').style.display = "block";
             const elements = document.getElementsByClassName('action-btn');
 
-            for (let i = 0; i < elements.lenght; i++) {
+            for (let i = 0; i < collection.lenght; i++) {
                 elements[i].disabled = true;
             }
 
             document.getElementById('subtitulo').innerHTML = "Excluir Cadastro de <br><br>" + name;
 
-            document.getElementById('exclude').setAttribute('onclick', "linkToRoute('exclude', " + id + ")");
-
-            document.getElementById('cancel').setAttribute('onclick', "linkToRoute('home', 'null')");
+            // document.getElementById('exclude').setAttribute('onclick', "linkToRoute('exclude', " + id + ")");
+                
+            }
         }
 
     </script>
+
     @toastr_css
+
     <style>
 
         body {
@@ -240,8 +234,6 @@
 
             </div>
 
-           
-
         </div>
 
         <div id="header">
@@ -276,7 +268,7 @@
                         @foreach($citizens as $citizen)
                         <tr>
                             <td>{{$citizen->name}}</td>
-                            <td>{{$citizen->born_day->format("d/m/Y")}}</td>
+                            <td>{{$citizen->born_day}}</td>
                             <td>{{$citizen->cns}}</td>
                             <td>{{$citizen->mother}}</td>
                             <td>
@@ -289,7 +281,7 @@
                                 </button>
 
                                 <button class="action-btn" style="background-color: transparent; border: none; cursor:pointer;" 
-                                        onclick="showPupup('{{$citizen->name}}', '{{$citizen->id}}');">
+                                        onclick="showPupup('{{$citizen->name}}', {{$citizen->id}});">
 
                                     <img src="{{asset('images/fi-rr-cross.svg')}}" alt="excluir">
 

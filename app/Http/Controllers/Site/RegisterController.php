@@ -17,40 +17,9 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        return view('site.register.index');
-    }
+        $citizens = Citizen::all();
 
-    public function form(RegisterFormRequest $request) 
-    {
-
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        //     'mother' => 'required',
-        //     'cns' => 'required',
-        //     'born_day' => 'required|date',
-        //     'gender' => 'required',
-        //     'email' => 'email',
-        //     'cep' => 'required',
-        //     'state' => 'required',
-        //     'city' => 'required',
-        //     'district' => 'required',
-        //     'adress_type' => 'required',
-        //     'adress' => 'required',
-        //     'number' => 'required',
-        // ]);
-
-        // if ($validator->fails()) 
-        // {
-        //     return dd($validator);
-        // }
-        
-        Citizen::create($request->all());
-
-        // dd($retorno);
-
-        toastr()->success('Cidadão Cadastrado com Sucesso!');
-
-        return redirect()->route('site.form');
+        return view('site.list.index', compact('citizens'));
     }
 
     /**
@@ -60,18 +29,22 @@ class RegisterController extends Controller
      */
     public function create()
     {
-        //
+        return view('site.register.index');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\RegisterFormRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterFormRequest $request)
     {
-        //
+        Citizen::create($request->all());
+
+        toastr()->success('Cidadão Cadastrado com Sucesso!');
+
+        return redirect()->route('register.index');
     }
 
     /**
@@ -80,32 +53,54 @@ class RegisterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($citizen)
     {
-        //
+        $retorno = $this->getCitizenById($citizen);
+
+        $retorno->delete();
+
+        toastr()->success('Cidadão Deletado com Sucesso!');
+
+        return redirect()->route('register.index');
     }
 
-    /**
+   /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($citizen)
     {
-        //
+        $retorno = $this->getCitizenById($citizen);
+        return view('site.register.edit', ['citizen' => $retorno]);
+    }
+
+    public function getCitizenById($citizen)
+    {
+        return Citizen::whereId($citizen)->firstOrFail();
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\RegisterFormRequest  $request
+     * @param  \App\Models\Citizen  $citizen
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RegisterFormRequest $request, $id)
     {
-        //
+        // $cadastro = Citizen::find($id);
+
+        // $cadastro->update($request->all());
+
+        // $cadastro->save();
+
+        Citizen::find($id)->update($request->all());
+
+        toastr()->success('Cadastro de Cidadão Atualizado com Sucesso!');
+
+        return redirect()->route('register.index');
     }
 
     /**
@@ -114,8 +109,8 @@ class RegisterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($citizen)
     {
-        //
+        
     }
 }
